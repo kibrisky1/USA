@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The United States - A Visual Journey</title>
+    <style>
+        /* CORE SETUP & TYPOGRAPHY */
+        :root {
+            --primary: #ff4d4d;
+            --secondary: #3b82f6;
+            --dark: #070a13;
+            --light: #f8fafc;
+            --glass: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: default;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ANIMATED BACKGROUND ELEMENTS */
+        .bg-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #070a13 100%);
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: move-orb 20s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -10%;
+            right: -10%;
+            animation-duration: 25s;
+        }
+
+        @keyframes move-orb {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        /* MASTER GLASS OVERLAY */
+        .glass-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ADVANCED ANIMATIONS DEFINITIONS */
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* SCROLL REACTION CLASSES */
+        .hidden {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* GENERAL LAYOUT COMPONENTS */
+        section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2; /* Above glass and orbs */
+        }
+
+        h1, h2 {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #ffffff, var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: transform 0.4s ease;
+        }
+
+        h1:hover, h2:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, var(--primary), #ffffff);
+            -webkit-background-clip: text;
+        }
+
+        p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        /* IMAGE STYLING */
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transition: all 0.5s ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto;
+            max-width: 500px;
+            display: block;
+            transition: transform 0.8s ease;
+        }
+
+        .img-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(59, 130, 246, 0.3);
+        }
+
+        .img-container:hover img {
+            transform: scale(1.1);
+        }
+
+        /* GLASS CARDS */
+        .info-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            flex-direction: column;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+        }
+
+        .hero-img {
+            margin-top: 3rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* CONTENT GRIDS */
+        .grid-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .grid-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        /* GEOPOLITICS SECTION */
+        #geopolitics {
+            flex-direction: column;
+        }
+
+        .geo-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .geo-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom: 4px solid var(--secondary);
+            padding: 2.5rem;
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            border-radius: 16px;
+            transition: 0.3s ease;
+        }
+
+        .geo-card:hover {
+            border-bottom-color: var(--primary);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 3rem;
+            text-align: center;
+            background: transparent;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid var(--glass-border);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ANIMATED BACKGROUND LAYER -->
+    <div class="bg-wrapper">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- GLASS OVERLAY LAYER -->
+    <div class="glass-overlay"></div>
+
+    <!-- HERO SECTION -->
+    <header id="hero" class="hero">
+        <div class="hidden">
+            <h1>United States of America</h1>
+            <p>North America is home to this big nation.</p>
+            <p>It has fifty states and diverse people.</p>
+            <div class="img-container hero-img">
+                <img src="usa.png" alt="Map of USA">
+            </div>
+        </div>
+    </header>
+
+    <!-- NEW YORK SECTION -->
+    <section id="nyc">
+        <div class="grid-section">
+            <div class="info-card hidden">
+                <h2>New York City</h2>
+                <p>New York is a very large city.</p>
+                <p>It was once a Dutch colony.</p>
+                <p>People call it the Big Apple.</p>
+                <p>Today it is a center for money.</p>
+                <p>The city has many tall skyscrapers.</p>
+            </div>
+            <div class="img-container hidden" style="transition-delay: 200ms;">
+                <img src="new.png" alt="New York City">
+            </div>
+        </div>
+    </section>
+
+    <!-- TEXAS SECTION -->
+    <section id="texas">
+        <div class="grid-section">
+            <div class="img-container hidden">
+                <img src="texas.png" alt="Texas">
+            </div>
+            <div class="info-card hidden" style="transition-delay: 200ms;">
+                <h2>Texas</h2>
+                <p>Texas is known for being huge.</p>
+                <p>It was once an independent country.</p>
+                <p>History is full of cowboys here.</p>
+                <p>Now it is famous for oil and tech.</p>
+                <p>The weather is often very hot.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOS ANGELES SECTION -->
+    <section id="la">
+        <div class="grid-section">
+            <div class="info-card hidden">
+                <h2>Los Angeles</h2>
+                <p>This city is in California.</p>
+                <p>It is famous for making movies.</p>
+                <p>Hollywood is a big part of history.</p>
+                <p>The weather is sunny all year.</p>
+                <p>Traffic is heavy on the highways.</p>
+            </div>
+            <div class="img-container hidden" style="transition-delay: 200ms;">
+                <img src="los.png" alt="Los Angeles">
+            </div>
+        </div>
+    </section>
+
+    <!-- GEOPOLITICAL SECTION -->
+    <section id="geopolitics">
+        <div class="hidden" style="text-align: center;">
+            <h2>Global Politics</h2>
+            <p>Current events involve other nations.</p>
+        </div>
+        
+        <div class="geo-container">
+            <div class="geo-card hidden">
+                <h2>Greenland</h2>
+                <p>Greenland is a large icy island.</p>
+                <p>It belongs to the Kingdom of Denmark.</p>
+                <p>The US showed interest in buying it.</p>
+                <p>This caused a small political debate.</p>
+                <p>The US wants it for strategic safety.</p>
+                <p>Denmark said it is not for sale.</p>
+            </div>
+
+            <div class="geo-card hidden" style="transition-delay: 200ms;">
+                <h2>Venezuela</h2>
+                <p>Venezuela is in South America.</p>
+                <p>The country has very large oil reserves.</p>
+                <p>Relations with the US are tense.</p>
+                <p>The US has placed strong sanctions.</p>
+                <p>Political leaders often disagree.</p>
+                <p>The situation remains difficult today.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Made By David Miron</p>
+    </footer>
+
+    <script>
+        // SCROLL REVEAL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('show');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
+
+        // MOUSE PARALLAX FOR IMAGES
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+
+            document.querySelectorAll('.img-container img').forEach(img => {
+                img.style.transform = `translateX(${x}px) translateY(${y}px) scale(1.1)`;
+            });
+            
+            // Subtle movement for the background orbs
+            document.querySelector('.orb-1').style.transform = `translate(${x*2}px, ${y*2}px)`;
+            document.querySelector('.orb-2').style.transform = `translate(${-x*2}px, ${-y*2}px)`;
+        });
+    </script>
+</body>
+</html>
